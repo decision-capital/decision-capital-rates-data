@@ -1,6 +1,7 @@
 
 name: Publish Treasury Relative Value
 
+
 on:
   push:
     branches:
@@ -8,6 +9,8 @@ on:
     paths:
       - '.github/workflows/publish-relative-value.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '30 23 * * 1-5'
 
 permissions:
   contents: write
