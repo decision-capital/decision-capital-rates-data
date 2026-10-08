@@ -21,6 +21,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Synchronize official Treasury data
+        run: |
+          git fetch origin main
+          git show origin/main:rates.json > rates-latest.json
+
+          python - <<'PY'
+          import json
+          from datetime import date
+
+          with open("rates-latest.json", encoding="utf-8") as f:
+              latest = json.load(f)
+
+          with open("rates.json", encoding="utf-8") as f:
+              current = json.load(f)
+
+          latest_date = date.fromisoformat(latest["updated"])
+          current_date = date.fromisoformat(current["updated"])
+
+          if latest_date < current_date:
+              raise SystemExit(
+                  "ERROR: main contiene datos anteriores a la rama."
+              )
+
+          if not latest.get("curve") or not latest.get("history"):
+              raise SystemExit(
+                  "ERROR: El archivo oficial está incompleto."
+              )
+
+          print("Treasury data date:", latest_date)
+          PY
+
+          cp rates-latest.json rates.json
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
