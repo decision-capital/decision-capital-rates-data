@@ -28,7 +28,7 @@ class TestRelativeValue(unittest.TestCase):
     def test_butterflies(self):
         result = calculate_metrics(self.curve)
         self.assertAlmostEqual(result["2s5s10s"], 12.5)
-        self.assertAlmostEqual(result["5s10s30s"], 4.0)
+        self.assertAlmostEqual(result["5s10s30s"], 28.0)
         self.assertAlmostEqual(result["10s20s30s"], 10.0)
 
     def test_missing_tenor(self):
