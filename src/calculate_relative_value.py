@@ -6,6 +6,7 @@ Output: data/relative_value.json (separate research file).
 
 All yields are in percent. Spreads and butterflies are in basis points.
 """
+import hashlib
 import json
 import math
 from datetime import datetime
@@ -118,6 +119,10 @@ def main():
     output = Path("data/relative_value.json")
 
     raw = json.loads(source.read_text(encoding="utf-8"))
+    source_data = {"curve": raw["curve"], "history": raw["history"]}
+    source_sha256 = hashlib.sha256(
+        json.dumps(source_data, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
     as_of = raw["updated"]
     datetime.strptime(as_of, "%Y-%m-%d")
 
@@ -140,6 +145,7 @@ def main():
 
     result = {
         "as_of": as_of,
+        "source_sha256": source_sha256,
         "source": "Decision Capital rates.json / U.S. Treasury",
         "units": "basis_points",
         "methodology": {
