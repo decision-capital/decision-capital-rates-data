@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate-relative-value:
@@ -34,3 +34,18 @@ jobs:
       - name: Validate generated JSON
         run: |
           python -m json.tool data/relative_value.json > /dev/null
+          
+      - name: Publish Relative Value JSON
+        if: github.ref == 'refs/heads/feature/relative-value-analyzer'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/relative_value.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to publish"
+          else
+            git commit -m "Update Relative Value research data [skip ci]"
+            git push origin HEAD:feature/relative-value-analyzer
+          fi
+
