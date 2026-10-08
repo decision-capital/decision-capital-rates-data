@@ -40,6 +40,7 @@ jobs:
           git show origin/main:rates.json > rates-latest.json
 
       - name: Validate source data
+        id: validate_source
         run: |
           python - <<'PY'
           import json
@@ -69,6 +70,20 @@ jobs:
               if latest_date < previous_date:
                   raise SystemExit("Relative Value date regression")
 
+          
+          if latest_date == previous_date:
+              print("No new Treasury observation")
+              publish = "false"
+          else:
+              publish = "true"
+    
+          if not existing.exists():
+              publish = "true"
+
+          import os
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.write(f"publish={publish}\n")
+
           Path("rates.json").write_text(
               json.dumps(latest), encoding="utf-8"
           )
@@ -81,10 +96,16 @@ jobs:
             -s src/tests -p "test_*.py" -v
 
       - name: Generate Relative Value data
+        
+        if: steps.validate_source.outputs.publish == 'true'
+
         run: |
           python src/calculate_relative_value.py
 
       - name: Validate generated output
+        
+        if: steps.validate_source.outputs.publish == 'true'
+
         run: |
           python - <<'PY'
           import json
@@ -105,6 +126,7 @@ jobs:
           PY
 
       - name: Publish validated JSON
+        if: steps.validate_source.outputs.publish == 'true'
         run: |
           cp data/relative_value.json /tmp/relative_value.json
 
