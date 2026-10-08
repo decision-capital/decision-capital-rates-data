@@ -1,0 +1,126 @@
+
+name: Publish Treasury Relative Value
+
+on:
+  push:
+    branches:
+      - feature/relative-value-analyzer
+    paths:
+      - '.github/workflows/publish-relative-value.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rv-publication-development
+  cancel-in-progress: false
+
+jobs:
+  publish-relative-value:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout development branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/relative-value-analyzer
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download latest Treasury data
+        run: |
+          git fetch origin main
+          git show origin/main:rates.json > rates-latest.json
+
+      - name: Validate source data
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import date
+          from pathlib import Path
+
+          latest = json.loads(
+              Path("rates-latest.json").read_text(encoding="utf-8")
+          )
+          current = json.loads(
+              Path("rates.json").read_text(encoding="utf-8")
+          )
+
+          latest_date = date.fromisoformat(latest["updated"])
+          current_date = date.fromisoformat(current["updated"])
+
+          if latest_date < current_date:
+              raise SystemExit("Source date regression")
+
+          if not latest.get("curve") or not latest.get("history"):
+              raise SystemExit("Incomplete Treasury dataset")
+
+          existing = Path("data/relative_value.json")
+          if existing.exists():
+              previous = json.loads(existing.read_text(encoding="utf-8"))
+              previous_date = date.fromisoformat(previous["as_of"])
+              if latest_date < previous_date:
+                  raise SystemExit("Relative Value date regression")
+
+          Path("rates.json").write_text(
+              json.dumps(latest), encoding="utf-8"
+          )
+          print("Validated Treasury observation:", latest_date)
+          PY
+
+      - name: Run unit tests
+        run: |
+          python -m unittest discover \
+            -s src/tests -p "test_*.py" -v
+
+      - name: Generate Relative Value data
+        run: |
+          python src/calculate_relative_value.py
+
+      - name: Validate generated output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rates = json.loads(Path("rates.json").read_text())
+          rv = json.loads(
+              Path("data/relative_value.json").read_text()
+          )
+
+          if rates["updated"] != rv["as_of"]:
+              raise SystemExit("Observation date mismatch")
+
+          if not rv.get("metrics"):
+              raise SystemExit("Missing Relative Value metrics")
+
+          print("Validated Relative Value:", rv["as_of"])
+          PY
+
+      - name: Publish validated JSON
+        run: |
+          cp data/relative_value.json /tmp/relative_value.json
+
+          git fetch origin feature/relative-value-analyzer
+          git checkout -B feature/relative-value-analyzer \
+            origin/feature/relative-value-analyzer
+
+          mkdir -p data
+          cp /tmp/relative_value.json data/relative_value.json
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/relative_value.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to publish"
+          else
+            git commit -m "Update validated RV data [skip ci]"
+            git push origin HEAD:feature/relative-value-analyzer
+          fi
