@@ -43,7 +43,9 @@ jobs:
         id: validate_source
         run: |
           python - <<'PY'
+          import hashlib
           import json
+          import os
           from datetime import date
           from pathlib import Path
 
@@ -63,24 +65,30 @@ jobs:
           if not latest.get("curve") or not latest.get("history"):
               raise SystemExit("Incomplete Treasury dataset")
 
+          source_data = {
+              "curve": latest["curve"],
+              "history": latest["history"],
+          }
+          source_hash = hashlib.sha256(
+              json.dumps(
+                  source_data, sort_keys=True, separators=(",", ":")
+              ).encode("utf-8")
+          ).hexdigest()
+
+          publish = "true"
           existing = Path("data/relative_value.json")
           if existing.exists():
               previous = json.loads(existing.read_text(encoding="utf-8"))
               previous_date = date.fromisoformat(previous["as_of"])
               if latest_date < previous_date:
                   raise SystemExit("Relative Value date regression")
+              if (
+                  latest_date == previous_date
+                  and previous.get("source_sha256") == source_hash
+              ):
+                  print("No new or revised Treasury data")
+                  publish = "false"
 
-          
-          if latest_date == previous_date:
-              print("No new Treasury observation")
-              publish = "false"
-          else:
-              publish = "true"
-    
-          if not existing.exists():
-              publish = "true"
-
-          import os
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
               f.write(f"publish={publish}\n")
 
@@ -119,7 +127,7 @@ jobs:
           if rates["updated"] != rv["as_of"]:
               raise SystemExit("Observation date mismatch")
 
-          if not rv.get("metrics"):
+          if rv.get("source_sha256") != __import__("hashlib").sha256(\n              json.dumps(\n                  {"curve": rates["curve"], "history": rates["history"]},\n                  sort_keys=True, separators=(",", ":")\n              ).encode("utf-8")\n          ).hexdigest():\n              raise SystemExit("Source hash mismatch")\n\n          if not rv.get("metrics"):
               raise SystemExit("Missing Relative Value metrics")
 
           print("Validated Relative Value:", rv["as_of"])
