@@ -5,8 +5,10 @@ name: Publish Treasury Relative Value
 on:
   push:
     branches:
+      - main
       - feature/relative-value-analyzer
     paths:
+      - 'rates.json'
       - '.github/workflows/publish-relative-value.yml'
   workflow_dispatch:
   schedule:
@@ -16,7 +18,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: rv-publication-development
+  group: rv-publication-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -27,7 +29,7 @@ jobs:
       - name: Checkout development branch
         uses: actions/checkout@v4
         with:
-          ref: feature/relative-value-analyzer
+          ref: ${{ github.ref_name }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -127,7 +129,8 @@ jobs:
           if rates["updated"] != rv["as_of"]:
               raise SystemExit("Observation date mismatch")
 
-          expected_hash = __import__("hashlib").sha256(
+          import hashlib
+          expected_hash = hashlib.sha256(
               json.dumps(
                   {"curve": rates["curve"], "history": rates["history"]},
                   sort_keys=True, separators=(",", ":")
@@ -147,9 +150,9 @@ jobs:
         run: |
           cp data/relative_value.json /tmp/relative_value.json
 
-          git fetch origin feature/relative-value-analyzer
-          git checkout -B feature/relative-value-analyzer \
-            origin/feature/relative-value-analyzer
+          git fetch origin "$GITHUB_REF_NAME"
+          git checkout -B "$GITHUB_REF_NAME" \
+            "origin/$GITHUB_REF_NAME"
 
           mkdir -p data
           cp /tmp/relative_value.json data/relative_value.json
@@ -164,5 +167,5 @@ jobs:
             echo "No changes to publish"
           else
             git commit -m "Update validated RV data [skip ci]"
-            git push origin HEAD:feature/relative-value-analyzer
+            git push origin "HEAD:$GITHUB_REF_NAME"
           fi
