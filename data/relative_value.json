@@ -1,5 +1,6 @@
 {
   "as_of": "2026-10-07",
+  "source_sha256": "b5e0001313f00b4ea81da1c092ff5d446d632a5c6f196bdb231876ceaa02349e",
   "source": "Decision Capital rates.json / U.S. Treasury",
   "units": "basis_points",
   "methodology": {
