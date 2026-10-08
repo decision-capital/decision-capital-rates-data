@@ -127,7 +127,16 @@ jobs:
           if rates["updated"] != rv["as_of"]:
               raise SystemExit("Observation date mismatch")
 
-          if rv.get("source_sha256") != __import__("hashlib").sha256(\n              json.dumps(\n                  {"curve": rates["curve"], "history": rates["history"]},\n                  sort_keys=True, separators=(",", ":")\n              ).encode("utf-8")\n          ).hexdigest():\n              raise SystemExit("Source hash mismatch")\n\n          if not rv.get("metrics"):
+          expected_hash = __import__("hashlib").sha256(
+              json.dumps(
+                  {"curve": rates["curve"], "history": rates["history"]},
+                  sort_keys=True, separators=(",", ":")
+              ).encode("utf-8")
+          ).hexdigest()
+          if rv.get("source_sha256") != expected_hash:
+              raise SystemExit("Source hash mismatch")
+
+          if not rv.get("metrics"):
               raise SystemExit("Missing Relative Value metrics")
 
           print("Validated Relative Value:", rv["as_of"])
