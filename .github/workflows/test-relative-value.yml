@@ -1,11 +1,14 @@
 
 name: Test Treasury Relative Value
 
+
 on:
   push:
     branches:
       - feature/relative-value-analyzer
   workflow_dispatch:
+  schedule:
+    - cron: '30 23 * * 1-5'
 
 permissions:
   contents: write
