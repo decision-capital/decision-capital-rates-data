@@ -1,0 +1,84 @@
+
+name: Manual Relative Value Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-relative-value:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout development branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/relative-value-analyzer
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Synchronize Treasury data from main
+        run: |
+          curl --fail --location --silent --show-error \
+            --retry 3 \
+            "https://raw.githubusercontent.com/decision-capital/decision-capital-rates-data/main/rates.json" \
+            -o rates-latest.json
+
+          python - <<'PY'
+          import json
+          from datetime import date
+          from pathlib import Path
+
+          latest = json.loads(
+              Path("rates-latest.json").read_text(encoding="utf-8")
+          )
+          current = json.loads(
+              Path("rates.json").read_text(encoding="utf-8")
+          )
+
+          latest_date = date.fromisoformat(latest["updated"])
+          current_date = date.fromisoformat(current["updated"])
+
+          if latest_date < current_date:
+              raise SystemExit("ERROR: Main contains older data")
+
+          if not latest.get("curve") or not latest.get("history"):
+              raise SystemExit("ERROR: Incomplete Treasury dataset")
+
+          print("Treasury observation:", latest_date)
+          Path("rates.json").write_text(
+              json.dumps(latest), encoding="utf-8"
+          )
+          PY
+
+      - name: Run Relative Value unit tests
+        run: |
+          python -m unittest discover -s src/tests -p "test_*.py" -v
+
+      - name: Generate Relative Value data
+        run: |
+          python src/calculate_relative_value.py
+
+      - name: Validate output and dates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          rates = json.loads(Path("rates.json").read_text())
+          rv = json.loads(
+              Path("data/relative_value.json").read_text()
+          )
+
+          assert rates["updated"] == rv["as_of"], \
+              "Observation dates do not match"
+
+          assert rv.get("metrics"), "Missing RV metrics"
+          print("Validation passed:", rv["as_of"])
+          PY
