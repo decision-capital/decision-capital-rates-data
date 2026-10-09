@@ -1,6 +1,6 @@
 {
-  "as_of": "2026-10-08",
-  "source_sha256": "912c8e351ac974408291dae4b56034a4b75246b8d322b84276a842669be69469",
+  "as_of": "2026-10-09",
+  "source_sha256": "0280139a0ad35b06a10afca655d075f2865cde7f59a9d560208b8ab8bce6fd29",
   "source": "Decision Capital rates.json / U.S. Treasury",
   "units": "basis_points",
   "methodology": {
@@ -11,170 +11,170 @@
   },
   "metrics": {
     "2s10s": {
-      "value_bp": 47.0,
+      "value_bp": 44.0,
       "statistics": {
         "20": {
-          "mean_bp": 35.05,
-          "std_bp": 8.7263,
-          "z_score": 1.3694,
-          "percentile": 87.5,
+          "mean_bp": 35.45,
+          "std_bp": 9.0746,
+          "z_score": 0.9422,
+          "percentile": 70.0,
           "observations": 20
         },
         "60": {
-          "mean_bp": 40.6167,
-          "std_bp": 7.5941,
-          "z_score": 0.8406,
-          "percentile": 78.33,
+          "mean_bp": 40.7,
+          "std_bp": 7.6361,
+          "z_score": 0.4322,
+          "percentile": 55.83,
           "observations": 60
         },
         "125": {
-          "mean_bp": 42.184,
-          "std_bp": 8.1077,
-          "z_score": 0.594,
-          "percentile": 65.2,
+          "mean_bp": 42.16,
+          "std_bp": 8.0889,
+          "z_score": 0.2275,
+          "percentile": 52.4,
           "observations": 125
         },
         "252": {
-          "mean_bp": 50.8333,
-          "std_bp": 11.5496,
-          "z_score": -0.3319,
-          "percentile": 33.13,
+          "mean_bp": 50.7897,
+          "std_bp": 11.5432,
+          "z_score": -0.5882,
+          "percentile": 25.99,
           "observations": 252
         }
       },
       "history_count": 499
     },
     "5s30s": {
-      "value_bp": 61.0,
+      "value_bp": 58.0,
       "statistics": {
         "20": {
-          "mean_bp": 53.1,
-          "std_bp": 6.2522,
-          "z_score": 1.2636,
-          "percentile": 87.5,
+          "mean_bp": 53.05,
+          "std_bp": 6.1845,
+          "z_score": 0.8004,
+          "percentile": 75.0,
           "observations": 20
         },
         "60": {
-          "mean_bp": 70.9167,
-          "std_bp": 14.0858,
-          "z_score": -0.704,
-          "percentile": 29.17,
+          "mean_bp": 70.5667,
+          "std_bp": 14.0669,
+          "z_score": -0.8933,
+          "percentile": 25.0,
           "observations": 60
         },
         "125": {
-          "mean_bp": 77.912,
-          "std_bp": 14.1218,
-          "z_score": -1.1976,
-          "percentile": 14.0,
+          "mean_bp": 77.624,
+          "std_bp": 14.0966,
+          "z_score": -1.3921,
+          "percentile": 12.0,
           "observations": 125
         },
         "252": {
-          "mean_bp": 90.877,
-          "std_bp": 16.8604,
-          "z_score": -1.772,
-          "percentile": 6.94,
+          "mean_bp": 90.7183,
+          "std_bp": 16.9524,
+          "z_score": -1.93,
+          "percentile": 5.95,
           "observations": 252
         }
       },
       "history_count": 499
     },
     "10s30s": {
-      "value_bp": 38.0,
+      "value_bp": 36.0,
       "statistics": {
         "20": {
-          "mean_bp": 34.75,
-          "std_bp": 3.1603,
-          "z_score": 1.0284,
-          "percentile": 85.0,
+          "mean_bp": 34.55,
+          "std_bp": 2.8013,
+          "z_score": 0.5176,
+          "percentile": 67.5,
           "observations": 20
         },
         "60": {
-          "mean_bp": 45.9833,
-          "std_bp": 8.6477,
-          "z_score": -0.9232,
-          "percentile": 28.33,
+          "mean_bp": 45.7333,
+          "std_bp": 8.6581,
+          "z_score": -1.1242,
+          "percentile": 22.5,
           "observations": 60
         },
         "125": {
-          "mean_bp": 49.576,
-          "std_bp": 7.8141,
-          "z_score": -1.4814,
-          "percentile": 13.6,
+          "mean_bp": 49.4,
+          "std_bp": 7.8251,
+          "z_score": -1.7124,
+          "percentile": 10.8,
           "observations": 125
         },
         "252": {
-          "mean_bp": 55.5873,
-          "std_bp": 8.5744,
-          "z_score": -2.0511,
-          "percentile": 6.75,
+          "mean_bp": 55.5079,
+          "std_bp": 8.644,
+          "z_score": -2.2568,
+          "percentile": 5.36,
           "observations": 252
         }
       },
       "history_count": 499
     },
     "2s5s10s": {
-      "value_bp": 6.375,
+      "value_bp": 5.5,
       "statistics": {
         "20": {
-          "mean_bp": 3.5562,
-          "std_bp": 1.9351,
-          "z_score": 1.4567,
-          "percentile": 95.0,
+          "mean_bp": 3.6562,
+          "std_bp": 2.0244,
+          "z_score": 0.9108,
+          "percentile": 70.0,
           "observations": 20
         },
         "60": {
-          "mean_bp": 0.4521,
-          "std_bp": 2.8789,
-          "z_score": 2.0574,
-          "percentile": 98.33,
+          "mean_bp": 0.6042,
+          "std_bp": 2.946,
+          "z_score": 1.6619,
+          "percentile": 90.0,
           "observations": 60
         },
         "125": {
-          "mean_bp": -1.971,
-          "std_bp": 3.3882,
-          "z_score": 2.4633,
-          "percentile": 99.2,
+          "mean_bp": -1.874,
+          "std_bp": 3.4516,
+          "z_score": 2.1364,
+          "percentile": 95.2,
           "observations": 125
         },
         "252": {
-          "mean_bp": -3.5188,
-          "std_bp": 3.4905,
-          "z_score": 2.8345,
-          "percentile": 99.6,
+          "mean_bp": -3.4668,
+          "std_bp": 3.5395,
+          "z_score": 2.5334,
+          "percentile": 97.62,
           "observations": 252
         }
       },
       "history_count": 499
     },
     "5s10s30s": {
-      "value_bp": 10.8,
+      "value_bp": 10.4,
       "statistics": {
         "20": {
-          "mean_bp": 7.73,
-          "std_bp": 2.8152,
-          "z_score": 1.0905,
-          "percentile": 80.0,
+          "mean_bp": 7.89,
+          "std_bp": 2.8931,
+          "z_score": 0.8676,
+          "percentile": 70.0,
           "observations": 20
         },
         "60": {
-          "mean_bp": 10.75,
-          "std_bp": 2.999,
-          "z_score": 0.0167,
-          "percentile": 42.5,
+          "mean_bp": 10.72,
+          "std_bp": 2.9894,
+          "z_score": -0.107,
+          "percentile": 35.0,
           "observations": 60
         },
         "125": {
-          "mean_bp": 12.7536,
-          "std_bp": 3.8487,
-          "z_score": -0.5076,
-          "percentile": 29.2,
+          "mean_bp": 12.6992,
+          "std_bp": 3.8278,
+          "z_score": -0.6007,
+          "percentile": 23.6,
           "observations": 125
         },
         "252": {
-          "mean_bp": 17.1143,
-          "std_bp": 5.2524,
-          "z_score": -1.2022,
-          "percentile": 14.48,
+          "mean_bp": 17.0667,
+          "std_bp": 5.2551,
+          "z_score": -1.2686,
+          "percentile": 11.71,
           "observations": 252
         }
       },
