@@ -1,35 +1,35 @@
 {
-  "updated": "2026-10-16",
+  "updated": "2026-10-19",
   "benchmarks": {
     "2Y": {
-      "yield": 4.74,
-      "change_bp": -3.0
+      "yield": 4.77,
+      "change_bp": 3.0
     },
     "5Y": {
-      "yield": 4.89,
-      "change_bp": -2.0
+      "yield": 4.94,
+      "change_bp": 5.0
     },
     "10Y": {
-      "yield": 5.09,
-      "change_bp": -1.0
+      "yield": 5.15,
+      "change_bp": 6.0
     },
     "30Y": {
-      "yield": 5.43,
-      "change_bp": 0.0
+      "yield": 5.48,
+      "change_bp": 5.0
     }
   },
   "spreads": {
-    "2s10s_bp": 35.0,
-    "2s10s_change_bp": 2.0,
+    "2s10s_bp": 38.0,
+    "2s10s_change_bp": 3.0,
     "5s30s_bp": 54.0,
-    "5s30s_change_bp": 2.0,
-    "2s30s_bp": 69.0,
-    "2s30s_change_bp": 3.0
+    "5s30s_change_bp": 0.0,
+    "2s30s_bp": 71.0,
+    "2s30s_change_bp": 2.0
   },
   "curve": [
     {
       "tenor": "1M",
-      "yield": 4.12
+      "yield": 4.11
     },
     {
       "tenor": "1.5M",
@@ -41,60 +41,50 @@
     },
     {
       "tenor": "3M",
-      "yield": 4.26
+      "yield": 4.27
     },
     {
       "tenor": "4M",
-      "yield": 4.32
-    },
-    {
-      "tenor": "6M",
       "yield": 4.34
     },
     {
+      "tenor": "6M",
+      "yield": 4.37
+    },
+    {
       "tenor": "1Y",
-      "yield": 4.46
+      "yield": 4.5
     },
     {
       "tenor": "2Y",
-      "yield": 4.74
+      "yield": 4.77
     },
     {
       "tenor": "3Y",
-      "yield": 4.82
+      "yield": 4.85
     },
     {
       "tenor": "5Y",
-      "yield": 4.89
+      "yield": 4.94
     },
     {
       "tenor": "7Y",
-      "yield": 4.98
+      "yield": 5.04
     },
     {
       "tenor": "10Y",
-      "yield": 5.09
+      "yield": 5.15
     },
     {
       "tenor": "20Y",
-      "yield": 5.47
+      "yield": 5.53
     },
     {
       "tenor": "30Y",
-      "yield": 5.43
+      "yield": 5.48
     }
   ],
   "history": [
-    {
-      "date": "2024-10-16",
-      "2Y": 3.93,
-      "5Y": 3.84,
-      "10Y": 4.02,
-      "30Y": 4.3,
-      "2s10s_bp": 9.0,
-      "5s30s_bp": 46.0,
-      "2s30s_bp": 37.0
-    },
     {
       "date": "2024-10-17",
       "2Y": 3.96,
@@ -5084,6 +5074,16 @@
       "2s10s_bp": 35.0,
       "5s30s_bp": 54.0,
       "2s30s_bp": 69.0
+    },
+    {
+      "date": "2026-10-19",
+      "2Y": 4.77,
+      "5Y": 4.94,
+      "10Y": 5.15,
+      "30Y": 5.48,
+      "2s10s_bp": 38.0,
+      "5s30s_bp": 54.0,
+      "2s30s_bp": 71.0
     }
   ]
 }
