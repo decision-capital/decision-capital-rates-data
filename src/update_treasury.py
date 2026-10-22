@@ -51,7 +51,7 @@ def main():
         except (ValueError, TypeError, KeyError, AttributeError):
             continue
     if not available:
-        raise ValueError("No complete dated Treasury curve found")
+        raise ValueError(f"No complete dated Treasury curve found; columns={list(rows[0])}; sample={rows[0]}")
     day, yields = max(available, key=lambda x: x[0])
     if day < current["updated"]:
         raise ValueError("Official source older than existing data")
