@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/refresh-treasury.yml'
+      - 'src/update_treasury.py'
   schedule:
     # 19:15 Lima / 20:15 or 19:15 New York (depending on DST).
     # Runs after US Treasury publishes the daily closing curve.
