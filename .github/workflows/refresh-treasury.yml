@@ -1,0 +1,46 @@
+name: Refresh official Treasury rates
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/refresh-treasury.yml'
+  schedule:
+    # 19:15 Lima / 20:15 or 19:15 New York (depending on DST).
+    # Runs after US Treasury publishes the daily closing curve.
+    - cron: '15 0 * * 2-6'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: treasury-source-main
+  cancel-in-progress: false
+
+jobs:
+  refresh-rates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and validate official Treasury yields
+        run: python src/update_treasury.py
+      - name: Publish updated rates.json
+        run: |
+          if git diff --quiet -- rates.json; then
+            echo "No newer Treasury observation available"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rates.json
+          git commit -m "Update public rates data from U.S. Treasury"
+          git pull --rebase origin main
+          git push origin HEAD:main
