@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path("rates.json")
 LABELS = {
-    "1M": "1 Mo", "1.5M": "1.5 Mo", "2M": "2 Mo",
+    "1M": "1 Mo", "1.5M": "1.5 Month", "2M": "2 Mo",
     "3M": "3 Mo", "4M": "4 Mo", "6M": "6 Mo",
     "1Y": "1 Yr", "2Y": "2 Yr", "3Y": "3 Yr",
     "5Y": "5 Yr", "7Y": "7 Yr", "10Y": "10 Yr",
@@ -51,7 +51,7 @@ def main():
         except (ValueError, TypeError, KeyError, AttributeError):
             continue
     if not available:
-        raise ValueError(f"No complete dated Treasury curve found; columns={list(rows[0])}; sample={rows[0]}")
+        raise ValueError(f"No complete Treasury curve; CSV columns={list(rows[0])}")
     day, yields = max(available, key=lambda x: x[0])
     if day < current["updated"]:
         raise ValueError("Official source older than existing data")
